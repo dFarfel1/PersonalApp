@@ -1,15 +1,15 @@
 import { Text, View } from "react-native";
+import {styles} from "../styles/styles";
+import {Link} from 'expo-router';
 
-export default function Index() {
+export default function ShapesGame() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+    <View style={styles.container}>
+      <Link href="./game">
+        <Text style={{ color: 'blue', marginTop: 20 }}>
+          Go to Game
+        </Text>
+      </Link>
     </View>
   );
 }
