@@ -8,7 +8,8 @@ interface ScoreProps {
 }
 
 const calculateScore = (sequence: number[] , userInput: number[]) => {
-    let score = 0;
+    let [score, total, numCorrect, maxStreak, currentStreak] = [0,0,0,0,0] ;
+    let accuracy = 0.0;
     for (let i = 0; i < sequence.length; i++) {
       if (userInput[i] === sequence[i]) {
         score += 100;
