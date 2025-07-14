@@ -1,15 +1,18 @@
-import { Text, View } from "react-native";
+import { Modal, Text, View } from "react-native";
 import { styles } from "../styles/styles";
 import Settings from "../components/Settings";
 import Button from "../components/Button";
 import Scorecard from "../components/Scorecard";
 import NumsDisplay from "../components/NumsDisplay";
-import { Link } from "expo-router";
+import { LinearGradient } from "expo-linear-gradient";
+import Background from "../components/Background";
 import { createContext, useContext, useState, useEffect } from "react";
+import ModalWrapper from "../components/ModalWrapper";
 
 export default function ShapesGame() {
   const [showSettings, setShowSettings] = useState(false);
   const [settings, setSettings] = useState({ numItems: 5, displayTime: 1 });
+  const [showScorecard, setShowScorecard] = useState(true);
 
   const [sequence, setSequence] = useState<number[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number | null>(null);
@@ -33,9 +36,9 @@ export default function ShapesGame() {
     setShowingSequence(true);
     setDisplaySequence([]);
     setUserInput([]);
+    setShowSettings(false);
+    setShowScorecard(true)
   };
-
-  
 
   const handleDigitPress = (digit: number) => {
     setUserInput((prev) => [...prev, digit]);
@@ -83,75 +86,122 @@ export default function ShapesGame() {
   }, [replayIndex]);
 
   return (
-    <View style={styles.container}>
-      <Text style={{ fontSize: 24, marginBottom: 20 }}>Game Screen</Text>
+    <Background>
+      <View style={styles.container}>
+        {(gamePhase === "preGame" || gamePhase === "postGame") && (
+          <>
+            <Button
+              onPress={() => setShowSettings((prev) => !prev)}
+              title="Settings"
+            ></Button>
 
-      {(gamePhase === "preGame" || gamePhase === "postGame") && (
-        <>
-          <Button
-            onPress={() => setShowSettings((prev) => !prev)}
-            title="Show Settings"
-          ></Button>
+            <Button onPress={startGame} title="Start Game"></Button>
+            {showSettings && (
+              <ModalWrapper
+                isVisible={true}
+                onClose={() => setShowSettings(false)}
+              >
+                
+                <Settings
+                  isVisible={showSettings}
+                  settings={settings}
+                  setSettings={setSettings}
+                />
+              </ModalWrapper>
 
-          <Button onPress={startGame} title="Start Game"></Button>
-          {showSettings && (
-            <Settings settings={settings} setSettings={setSettings}></Settings>
-          )}
-        </>
-      )}
-
-      {gamePhase === "displayingSequence" && (
-        <>
-          {showingSequence &&
-            currentIndex !== null &&
-            currentIndex < sequence.length && (
-              <Text>{sequence[currentIndex]}</Text>
+              //<Settings isVisible={true} settings={settings} setSettings={setSettings}></Settings>
             )}
-        </>
-      )}
+          </>
+        )}
 
-      {gamePhase === "enteringSequence" && (
-        <>
-          <NumsDisplay sequence={sequence} userInput={userInput}></NumsDisplay>
-          <Text>Enter the sequence:</Text>
-          <View style={styles.keypad}>
-            {digitRows.map((row, rowIndex) => (
-              <View key={rowIndex} style={styles.row}>
-                {row.map((num) => (
-                  <Button
-                    key={num}
-                    onPress={() => handleDigitPress(num)}
-                    title={num.toString()}
-                  ></Button>
-                ))}
-              </View>
-            ))}
+        {gamePhase === "postGame" && (
+          <Button
+              onPress={() => setShowScorecard((prev) => !prev)}
+              title="Show Scorecard"
+            ></Button>
+        )}
+
+        {gamePhase === "displayingSequence" && (
+          <>
+            {showingSequence &&
+              currentIndex !== null &&
+              currentIndex < sequence.length && (
+                <Text style={styles.sequenceText}>
+                  {sequence[currentIndex]}
+                </Text>
+              )}
+          </>
+        )}
+
+        {gamePhase === "enteringSequence" && (
+          <>
+            <NumsDisplay
+              sequence={sequence}
+              userInput={userInput}
+            ></NumsDisplay>
+            <Text>Enter the sequence:</Text>
+            <View style={styles.keypad}>
+              {digitRows.map((row, rowIndex) => (
+                <View key={rowIndex} style={styles.row}>
+                  {row.map((num) => (
+                    <Button
+                      key={num}
+                      onPress={() => handleDigitPress(num)}
+                      title={num.toString()}
+                    ></Button>
+                  ))}
+                </View>
+              ))}
+            </View>
+          </>
+        )}
+
+        {(gamePhase === "replayingSequence" || gamePhase === "postGame") && (
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <View
+              style={{ alignItems: "flex-start", justifyContent: "center" }}
+            >
+              <NumsDisplay
+                sequence={displaySequence}
+                userInput={userInput}
+                showColor={true}
+              />
+              <NumsDisplay
+                sequence={userInput}
+                userInput={displaySequence}
+                showColor={true}
+              />
+            </View>
           </View>
-        </>
-      )}
+        )}
 
-      {(gamePhase === "replayingSequence" || gamePhase === "postGame") && (
-        <View style={{ alignItems: "flex-start" }}>
-          <NumsDisplay
-            sequence={displaySequence}
-            userInput={userInput}
-            showColor={true}
-          />
-          <NumsDisplay
-            sequence={userInput}
-            userInput={displaySequence}
-            showColor={true}
-          />
-        </View>
-      )}
-
-      {gamePhase === "postGame" && (
-        <View>
-          <Scorecard sequence={sequence} userInput={userInput}></Scorecard>
-        </View>
-      )}
-    </View>
+        {gamePhase === "postGame" && (
+          <>
+            {showScorecard && (
+                
+                <ModalWrapper
+                  onClose={() => setShowScorecard(false)}
+                  isVisible={true}
+                >
+              
+                  <Scorecard
+                    isVisible={showScorecard}
+                    stats={{userInput: userInput, sequence: sequence}}
+                    setStats={() => 5}
+                  ></Scorecard>
+                  
+                </ModalWrapper>
+            )}
+          </>
+        )}
+      </View>
+    </Background>
   );
 }
 
-const digitRows = [[0, 1, 2, 3, 4], [5, 6, 7, 8, 9]];
+
+
+const digitRows = [
+  [0, 1, 2, 3, 4],
+  [5, 6, 7, 8, 9],
+];

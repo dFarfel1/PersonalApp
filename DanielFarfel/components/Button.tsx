@@ -1,5 +1,13 @@
 import React from 'react';
-import { Pressable, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
+import {
+  Pressable,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  TextStyle,
+  View,
+} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 
 interface ButtonProps {
@@ -10,7 +18,7 @@ interface ButtonProps {
   textStyle?: TextStyle;
 }
 
-function Button({
+export default function Button({
   onPress,
   title,
   icon,
@@ -18,39 +26,72 @@ function Button({
   textStyle,
 }: ButtonProps) {
   return (
-    <Pressable onPress={onPress} style={({ pressed }) => [styles.button, style, pressed && styles.pressed]}>
-      {icon && <Ionicons name={icon} size={20} color="#fff" style={styles.icon} />}
-      <Text style={[styles.text, textStyle]}>{title}</Text>
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.wrapper,
+        pressed && styles.pressed,
+        style,
+      ]}
+    >
+      <LinearGradient
+        colors={['#4c74ff', '#3b64ff']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.gradient}
+      >
+        <View style={styles.overlay} pointerEvents="none" />
+        {icon && (
+          <Ionicons name={icon} size={20} color="#fff" style={styles.icon} />
+        )}
+        <Text style={[styles.text, textStyle]}>{title}</Text>
+      </LinearGradient>
     </Pressable>
   );
 }
 
+
+
+
+
 const styles = StyleSheet.create({
-  button: {
+  wrapper: {
+    borderRadius: 30,
+    overflow: 'hidden',
+    marginBottom: 12
+  },
+  gradient: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#007AFF',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 10,
-    alignSelf: 'flex-start',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
+    justifyContent: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: 26,
+    borderRadius: 30,
+    position: 'relative',
+    shadowColor: '#3b64ff',
+    shadowOpacity: 0.35,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 5, // Android
   },
   pressed: {
-    opacity: 0.7,
+    opacity: 0.85,
+    transform: [{ scale: 0.97 }],
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: 30,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)', // light diffusion
+    zIndex: 1,
   },
   text: {
     color: '#fff',
-    fontWeight: '600',
-    fontSize: 16,
+    fontWeight: '700',
+    fontSize: 18,
+    zIndex: 2,
   },
   icon: {
-    marginRight: 8,
+    marginRight: 10,
+    zIndex: 2,
   },
 });
-
-export default Button;
