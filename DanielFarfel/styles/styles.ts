@@ -1,5 +1,6 @@
 import { StyleSheet, Platform } from "react-native";
 
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -48,6 +49,85 @@ export const styles = StyleSheet.create({
   inputText: {
     fontSize: 24,
     fontWeight: "bold",
+  }, 
+   text: {
+    fontSize: 16,
+    color: '#333',
+    lineHeight: 22,
+  },
+   title: {
+    fontSize: 32,
+    fontWeight: '800',
+    color: '#2f3a70',
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 16,
+    fontWeight: '400',
+    color: '#4f5e8c',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  section: {
+    width: '100%',
+    maxWidth: 500,
+    backgroundColor: 'rgba(255,255,255,0.85)',
+    padding: 20,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 12,
+    elevation: 3,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 10,
+    color: '#3b64ff',
+  },
+  sectionText: {
+    fontSize: 16,
+    color: '#333',
+    lineHeight: 22,
+  },
+  linkButton: {
+    backgroundColor: '#3b64ff',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+    marginTop: 10,
+  },
+  linkText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+    name: {
+    fontSize: 32,
+    fontWeight: '800',
+    color: '#2f3a70',
+    textAlign: 'center',
+  },
+  tagline: {
+    fontSize: 16,
+    fontWeight: '400',
+    color: '#4f5e8c',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  card: {
+    width: '100%',
+    maxWidth: 500,
+    backgroundColor: 'rgba(255,255,255,0.85)',
+    padding: 20,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 12,
+    elevation: 3,
   },
 
   sequenceText: {
