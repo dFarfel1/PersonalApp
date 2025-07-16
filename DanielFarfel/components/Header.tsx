@@ -1,15 +1,24 @@
-// components/StyledHeader.tsx
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useHover } from 'react-native-web-hooks';
 
-export default function Header() {
+interface HeaderProps {
+    title: string,
+    backgroundColor: [string, string] | [string, string, ...string[]];
+}
+
+export default function Header({title, backgroundColor}: HeaderProps) {
   const [pressed, setPressed] = useState(false);
   const isWeb = Platform.OS === 'web';
 
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={backgroundColor as [string, string]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.container}
+    >
       <Pressable
         onPress={() => {}}
         onPressIn={() => setPressed(true)}
@@ -20,26 +29,35 @@ export default function Header() {
           hovered && isWeb && styles.hovered,
         ]}
       >
-        <LinearGradient
-          colors={['#FF6FD8', '#3813C2']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.gradient}
-        >
-          <Text style={styles.text}>Memorization Game</Text>
-        </LinearGradient>
+        <View style={styles.inner}>
+          <Text style={styles.text}>{title}</Text>
+        </View>
       </Pressable>
-    </View>
+    </LinearGradient>
   );
 }
 
+
 const styles = StyleSheet.create({
   container: {
+    width: '100%',
     paddingTop: Platform.OS === 'ios' ? 60 : 40,
     paddingBottom: 20,
     alignItems: 'center',
-    backgroundColor: '#fff',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 6,
     zIndex: 10,
+  },
+  inner: {
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255,255,255,0.15)', // matte-glass feel
+    backdropFilter: 'blur(8px)', // for web
   },
   pressable: {
     transform: [{ scale: 1 }],
@@ -49,16 +67,6 @@ const styles = StyleSheet.create({
   },
   hovered: {
     transform: [{ scale: 1.05 }],
-  },
-  gradient: {
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 6,
-    elevation: 6,
   },
   text: {
     fontSize: 28,
