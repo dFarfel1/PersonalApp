@@ -9,7 +9,7 @@ namespace LeaderboardApi.Controllers
     {
         private static readonly List<ScoreEntry> Scores = new()
         {
-            new ScoreEntry { Id = 1, Name = "TopDog", Score = 420, Date = DateTime.UtcNow.AddDays(-1), Instagram = "@topdog123" },
+            new ScoreEntry { Id = 1, Name = "Daniel", Score = 420, Date = DateTime.UtcNow.AddDays(-1), Instagram = "@DanielFarfel" },
             new ScoreEntry { Id = 2, Name = "JDW", Score = 390, Date = DateTime.UtcNow.AddDays(-2) },
             new ScoreEntry { Id = 3, Name = "MRC", Score = 380, Date = DateTime.UtcNow.AddDays(-3) },
             new ScoreEntry { Id = 4, Name = "LOP", Score = 360, Date = DateTime.UtcNow.AddDays(-4) },
@@ -32,3 +32,4 @@ namespace LeaderboardApi.Controllers
         }
     }
 }
+
