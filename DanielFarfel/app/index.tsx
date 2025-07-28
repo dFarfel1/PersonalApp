@@ -23,7 +23,7 @@ export default function Home() {
         <View style={[screenStyles.section, screenStyles.projects]}>
           <Text style={styles.sectionTitle}>Links</Text>
 
-          <Link href="./leaderboard" asChild>
+          <Link href="./game" asChild>
             <Button title="🧠 Memory Game" onPress={() => {}} />
           </Link>
 
